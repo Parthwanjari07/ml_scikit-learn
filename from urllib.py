@@ -170,12 +170,21 @@ print('targets.shape:',targets.shape)
 model.fit(inputs,targets)
 predictions =model.predict(inputs)
 
-print(predictions)
-print(targets)
+#print(predictions)
+#print(targets)
 
 error = rmse(targets, predictions)
 print('RMSE:',error)
 
-print(model.coef_)
-print(model.intercept_)
+#print(model.coef_)
+#print(model.intercept_)
+
+#linear regression witth multiple features
+
+inputs_multi = non_smoker_df[['age','bmi']]
+
+model_multi = LinearRegression().fit(inputs_multi, targets)
+
+predictions_multi = model_multi.predict(inputs_multi)
+print(predictions_multi) 
 
