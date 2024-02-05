@@ -157,34 +157,49 @@ def try_parameters(w,b):
 #try_parameters(275,-3500)
 
 
-model =LinearRegression()
-
-#help(model.fit)
-
-inputs = non_smoker_df[['age']]
+#prediction using single feature linear regression
+    
 targets= non_smoker_df.charges
-#print('input.shape:',inputs.shape)
-#
-print('targets.shape:',targets.shape)
 
-model.fit(inputs,targets)
-predictions =model.predict(inputs)
+def prediction_single_feature():
+    model =LinearRegression()
 
-#print(predictions)
-#print(targets)
+    #help(model.fit)
 
-error = rmse(targets, predictions)
-print('RMSE:',error)
+    inputs = non_smoker_df[['age']]
+    
+    #print('input.shape:',inputs.shape)
+    #print('targets.shape:',targets.shape)
 
-#print(model.coef_)
-#print(model.intercept_)
+    model.fit(inputs,targets)
+    predictions =model.predict(inputs)
+
+    print(predictions)
+    #print(targets)
+
+    error = rmse(targets, predictions)
+    print('RMSE:',error)
+
+    #print(model.coef_)
+    #print(model.intercept_)
+
+
 
 #linear regression witth multiple features
+def prediction_multi_feature():
+    inputs_multi = non_smoker_df[['age','bmi']]
 
-inputs_multi = non_smoker_df[['age','bmi']]
+    model_multi = LinearRegression().fit(inputs_multi, targets)
 
-model_multi = LinearRegression().fit(inputs_multi, targets)
+    predictions_multi = model_multi.predict(inputs_multi)
+    print(predictions_multi) 
 
-predictions_multi = model_multi.predict(inputs_multi)
-print(predictions_multi) 
+    error_multi = rmse(targets, predictions_multi)
+    print('RMSE:',error_multi)
+
+
+prediction_single_feature()
+prediction_multi_feature()
+
+
 
