@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 from sklearn.linear_model import LinearRegression
+from sklearn import preprocessing
 
 
 
@@ -159,7 +160,7 @@ def try_parameters(w,b):
 
 #prediction using single feature linear regression
     
-targets= non_smoker_df.charges
+
 
 def prediction_single_feature():
     model =LinearRegression()
@@ -167,6 +168,7 @@ def prediction_single_feature():
     #help(model.fit)
 
     inputs = non_smoker_df[['age']]
+    targets= non_smoker_df.charges
     
     #print('input.shape:',inputs.shape)
     #print('targets.shape:',targets.shape)
@@ -186,8 +188,10 @@ def prediction_single_feature():
 
 
 #linear regression witth multiple features
+inputs_multi = medical_df[['age','bmi','children','smoker_numeric','sex_numeric','northeast','northwest','southeast','southwest']]
+
 def prediction_multi_feature():
-    inputs_multi = non_smoker_df[['age','bmi']]
+    targets = medical_df['charges']
 
     model_multi = LinearRegression().fit(inputs_multi, targets)
 
@@ -197,9 +201,34 @@ def prediction_multi_feature():
     error_multi = rmse(targets, predictions_multi)
     print('RMSE:',error_multi)
 
+    print(model_multi.coef)
+    print(model_multi.intercept_)
+    
+
 
 prediction_single_feature()
+
+
+#print(medical_df.describe())
+#print(medical_df['charges'])
+
+
+#Applying preprocessing using one hot encoding in regions
+#One-hot encoding is a technique used to convert categorical variables into a binary format, where each category becomes a separate binary feature.
+
+
+enc = preprocessing.OneHotEncoder()
+enc.fit(medical_df[['region']])
+#print(enc.categories_)
+
+one_hot = enc.transform(medical_df[['region']]).toarray()
+#print(one_hot)
+medical_df[['northeast', 'northwest', 'southeast', 'southwest']] =one_hot
+#print(medical_df)
+
 prediction_multi_feature()
+
+
 
 
 
