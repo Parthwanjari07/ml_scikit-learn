@@ -188,10 +188,13 @@ def prediction_single_feature():
 
 
 #linear regression witth multiple features
-inputs_multi = medical_df[['age','bmi','children','smoker_numeric','sex_numeric','northeast','northwest','southeast','southwest']]
+
 
 def prediction_multi_feature():
     targets = medical_df['charges']
+
+    input_cols = ['age','bmi','children','smoker_numeric','sex_numeric','northeast','northwest','southeast','southwest']    
+    inputs_multi = medical_df[input_cols]
 
     model_multi = LinearRegression().fit(inputs_multi, targets)
 
@@ -201,12 +204,14 @@ def prediction_multi_feature():
     error_multi = rmse(targets, predictions_multi)
     print('RMSE:',error_multi)
 
-    print(model_multi.coef)
-    print(model_multi.intercept_)
+    #print(model_multi.coef_)
+    #print(model_multi.intercept_)
+    
+    return model_multi.coef_, model_multi.intercept_ , input_cols , model_multi
     
 
 
-prediction_single_feature()
+#prediction_single_feature()
 
 
 #print(medical_df.describe())
@@ -226,9 +231,18 @@ one_hot = enc.transform(medical_df[['region']]).toarray()
 medical_df[['northeast', 'northwest', 'southeast', 'southwest']] =one_hot
 #print(medical_df)
 
-prediction_multi_feature()
+coef,intercept,columns,model= prediction_multi_feature()
 
+weight_df = pd.DataFrame({
+    'feature': np.append(columns,1),
+    'weight' : np.append(coef,intercept)
+})
 
+print(weight_df)
+
+#print(medical_df[columns].loc[10])
+
+print(model.predict([[28,30,2,1,0,0,1,0,0]]))
 
 
 
